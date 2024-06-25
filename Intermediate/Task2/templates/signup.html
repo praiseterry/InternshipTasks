@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+            margin-top: 10px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h2 {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Up</h1>
+        <form action="/signup" method="post">
+            Name: <input type="text" name="name" required><br>
+            Credit Card Number: <input type="text" name="cc_number" required><br>
+            <input type="submit" value="Sign Up">
+        </form>
+        {% if message %}
+            <h2>{{ message }}</h2>
+        {% endif %}
+        <a href="/">Back to Home</a>
+    </div>
+</body>
+</html>
+

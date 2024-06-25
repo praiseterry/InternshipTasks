@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Storage</title>
+</head>
+<body>
+    <h1>Credit Card Storage</h1>
+    <form action="/store" method="post">
+        Name: <input type="text" name="name" required><br>
+        Credit Card Number: <input type="text" name="cc_number" required><br>
+        <input type="submit" value="Store">
+    </form>
+    {% if message %}
+        <h2>{{ message }}</h2>
+    {% endif %}
+    <a href="/view_all">View All Stored Credit Card Details</a>
+</body>
+</html>

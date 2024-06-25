@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stored Credit Card Details</title>
+</head>
+<body>
+    <h1>Stored Credit Card Details</h1>
+    <ul>
+        {% for record in records %}
+            <li>Name: {{ record.name }}, Hashed Credit Card Number: {{ record.hashed_cc }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Back to Home</a>
+</body>
+</html>

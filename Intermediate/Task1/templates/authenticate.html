@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Authenticate</h2>
+        <div>
+            <p>Authenticate for user: {{ user['username'] }}</p>
+            <img src="{{ url_for('static', filename='uploads/' + user['username'] + '.jpg') }}" alt="User Image">
+        </div>
+        <button onclick="startAuthentication()">Authenticate</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function startAuthentication() {
+            fetch('/authenticate_user/{{ user["username"] }}')
+                .then(response => response.json())
+                .then(data => {
+                    const message = document.getElementById('message');
+                    if (data.authenticated) {
+                        message.textContent = 'Authentication Successful!';
+                    } else {
+                        message.textContent = 'Authentication Failed!';
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Capture Image</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Capture Image</h2>
+        <p>Capturing image for user: {{ username }}</p>
+        <button onclick="captureImage()">Capture Image</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function captureImage() {
+            fetch('/save_image/{{ username }}', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    const message = document.getElementById('message');
+                    if (data.success) {
+                        message.textContent = 'Image Captured Successfully!';
+                        window.location.href = '/';
+                    } else {
+                        message.textContent = 'Image Capture Failed!';
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

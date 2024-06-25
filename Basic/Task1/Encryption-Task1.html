@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Encryption and Decryption</title>
+<style>
+    body {
+        background-image: url('https://images.ctfassets.net/yewqr8zk7e5s/migrated-4572/61ee98fb5087c9873948b5473cfafb16/encryption-encoding-hashing.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        font-family: Arial, sans-serif;
+        color: aliceblue;
+        margin: 0;
+        padding: 20px;
+    }
+    textarea {
+        width: 60%;
+        height: 80px;
+        margin-bottom: 15px;
+        resize: none;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+    button {
+        padding: 12px 24px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+<body>
+    <h1>Text Encryption and Decryption</h1>
+   
+    <textarea id="inputText" placeholder="Enter text to encrypt or decrypt"></textarea>
+    <br>
+    <button onclick="encrypt()">Encrypt</button>
+    
+    <p><strong>Encrypted Text:</strong></p>
+    <textarea id="encryptedText" readonly></textarea>
+    <br>
+    <button onclick="decrypt()">Decrypt</button>
+    <p><strong>Decrypted Text:</strong></p>
+    <textarea id="decryptedText" readonly></textarea>
+   
+    <script>
+        async function encrypt() {
+            const input = document.getElementById("inputText").value;
+            const textEncoder = new TextEncoder();
+            const encodedData = textEncoder.encode(input);
+
+            const key = await window.crypto.subtle.generateKey(
+                {
+                    name: "AES-GCM",
+                    length: 256
+                },
+                true,
+                ["encrypt", "decrypt"]
+            );
+
+            const iv = window.crypto.getRandomValues(new Uint8Array(12));
+
+            const encryptedData = await window.crypto.subtle.encrypt(
+                {
+                    name: "AES-GCM",
+                    iv: iv
+                },
+                key,
+                encodedData
+            );
+
+            const encryptedText = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
+            document.getElementById("encryptedText").value = encryptedText;
+            document.getElementById("encryptedText").setAttribute("data-iv", JSON.stringify(Array.from(iv)));
+            document.getElementById("encryptedText").setAttribute("data-key", JSON.stringify(await window.crypto.subtle.exportKey("jwk", key)));
+        }
+
+        async function decrypt() {
+            const encryptedText = document.getElementById("encryptedText").value;
+            const encryptedData = Uint8Array.from(atob(encryptedText), c => c.charCodeAt(0));
+            const iv = new Uint8Array(JSON.parse(document.getElementById("encryptedText").getAttribute("data-iv")));
+            const key = await window.crypto.subtle.importKey(
+                "jwk",
+                JSON.parse(document.getElementById("encryptedText").getAttribute("data-key")),
+                { name: "AES-GCM", length: 256 },
+                true,
+                ["encrypt", "decrypt"]
+            );
+
+            const decryptedData = await window.crypto.subtle.decrypt(
+                {
+                    name: "AES-GCM",
+                    iv: iv
+                },
+                key,
+                encryptedData
+            );
+
+            const textDecoder = new TextDecoder();
+            const decryptedText = textDecoder.decode(decryptedData);
+            document.getElementById("decryptedText").value = decryptedText;
+        }
+    </script>
+</body>
+</html>
